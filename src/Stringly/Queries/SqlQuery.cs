@@ -48,7 +48,7 @@ namespace Stringly.Queries
             sqlBuilder.AppendLine("(");
             sqlBuilder.Append(innerSql);
             sqlBuilder.AppendLine(")");
-            sqlBuilder.AppendLine("SELECT *");
+            sqlBuilder.AppendLine(string.Format("SELECT [{0}]", string.Join("], [", metadata.Selects.Select(x => x.DisplayName).ToArray())));
             sqlBuilder.AppendLine("FROM QueryPage");
 
             if (metadata.Paging != null)
