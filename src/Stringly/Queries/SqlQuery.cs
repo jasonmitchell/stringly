@@ -44,8 +44,10 @@ namespace Stringly.Queries
             string innerSql = GenerateInnerSql();
             StringBuilder sqlBuilder = new StringBuilder();
 
-            sqlBuilder.AppendFormat("WITH QueryPage AS ({0})", innerSql);
-            sqlBuilder.AppendLine();
+            sqlBuilder.AppendLine("WITH QueryPage AS");
+            sqlBuilder.AppendLine("(");
+            sqlBuilder.Append(innerSql);
+            sqlBuilder.AppendLine(")");
             sqlBuilder.AppendLine("SELECT *");
             sqlBuilder.AppendLine("FROM QueryPage");
 
