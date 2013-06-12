@@ -24,6 +24,8 @@ Stringly uses a fluent API for building queries which allows developers to chain
                                                .Page(1, 100)
                                                .Compile()
                                                .Execute();
+                                               
+*Note the use of the ComparisonOperation enum.  An overload of the Where() method is provided to accept a string instead of an enum*
                                           
 This query will generate the following (semi-tidy) SQL:
 
