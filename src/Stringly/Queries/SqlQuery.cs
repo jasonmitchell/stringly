@@ -31,7 +31,7 @@ namespace Stringly.Queries
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    QueryResult result = new QueryResult(metadata.Selects.Select(x => x.DisplayName).ToList());
+                    QueryResult result = new QueryResult(metadata.Selects.Select(x => x.DisplayName).ToList(), metadata.Paging != null ? metadata.Paging.CurrentPage : 1);
 
                     while (reader.Read())
                     {
