@@ -12,18 +12,18 @@ Example
 
 Stringly uses a fluent API for building queries which allows developers to chain method calls together when constructing queries:
 
-    DataTable results = FluentQueryBuilder.Query(connectionString, "Users")
-                                          .Join("Organisations", "Organisations.Id", "Users.OrganisationId")
-                                          .Where("Users.FirstName", ComparisonOperation.Equals, "Jason")
-                                          .Select("Users.FirstName")
-                                          .Select("Users.LastName")
-                                          .Select("Users.Username")
-                                          .Select("Organisations.Name", "OrganisationName")
-                                          .Select("Organisations.CreatedDate")
-                                          .OrderBy("Organisations.Name", true)
-                                          .Page(1, 100)
-                                          .Compile()
-                                          .Execute();
+    DataTable results = FluentSqlQueryBuilder.Query(connectionString, "Users")
+                                             .Join("Organisations", "Organisations.Id", "Users.OrganisationId")
+                                             .Where("Users.FirstName", ComparisonOperation.Equals, "Jason")
+                                             .Select("Users.FirstName")
+                                             .Select("Users.LastName")
+                                             .Select("Users.Username")
+                                             .Select("Organisations.Name", "OrganisationName")
+                                             .Select("Organisations.CreatedDate")
+                                             .OrderBy("Organisations.Name", true)
+                                             .Page(1, 100)
+                                             .Compile()
+                                             .Execute();
                                           
 This query will generate the following (semi-tidy) SQL:
 
