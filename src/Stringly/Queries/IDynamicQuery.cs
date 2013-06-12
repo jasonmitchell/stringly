@@ -1,9 +1,7 @@
-﻿using System.Data;
-
-namespace Stringly.Queries
+﻿namespace Stringly.Queries
 {
     public interface IDynamicQuery
     {
-        DataTable Execute();
+        QueryResult Execute();
     }
 }

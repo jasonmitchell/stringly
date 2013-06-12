@@ -52,6 +52,8 @@
     <Compile Include="Metadata\SelectMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\SqlQuery.cs" />
+    <Compile Include="QueryResult.cs" />
+    <Compile Include="QueryResultRow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

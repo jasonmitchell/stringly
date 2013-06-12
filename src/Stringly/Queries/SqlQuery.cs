@@ -21,7 +21,7 @@ namespace Stringly.Queries
             generatedSql = GenerateSql();
         }
 
-        public DataTable Execute()
+        public QueryResult Execute()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(generatedSql, connection))
@@ -29,13 +29,18 @@ namespace Stringly.Queries
                 connection.Open();
                 command.CommandType = CommandType.Text;
 
-                DataTable results = new DataTable();
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    adapter.Fill(results);
-                }
+                    QueryResult result = new QueryResult(metadata.Selects.Select(x => x.DisplayName).ToList());
 
-                return results;
+                    while (reader.Read())
+                    {
+                        List<object> rowData = result.Columns.Select(x => reader[x]).ToList();
+                        result.Rows.Add(new QueryResultRow(rowData));
+                    }
+
+                    return result;
+                }
             }
         }
 
