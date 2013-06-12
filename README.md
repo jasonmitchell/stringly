@@ -1,7 +1,7 @@
 Stringly
 ========
 
-Stringly is a library for dynamically building queries from metadata supplied by an external source at runtime.  This is useful for scenarios where you don't know the structure of queries at compile-time but you need to provide a method of dynamically creating queries at run-time based on some external input; e.g. an application that allows users to create custom reports for a database through a UI such as web page.  Stringly works by building a collection of metadata relating to a query which is uses to generate the query itself which can then be executed to return a DataTable.  **Strong typing of results hopefully coming in the future.**
+Stringly is a library for dynamically building queries from metadata supplied by an external source at runtime.  This is useful for scenarios where you don't know the structure of queries at compile-time but you need to provide a method of dynamically creating queries at run-time based on some external input; e.g. an application that allows users to create custom reports for a database through a UI such as a web page.  Stringly works by building a collection of metadata relating to a query which is uses to generate the query itself which can then be executed to return a DataTable.  **Strong typing of results hopefully coming in the future.**
 
 Supported Query Methods
 -----------------------
@@ -37,7 +37,7 @@ This query will generate the following (semi-tidy) SQL:
     WHERE RowNumber > 0 AND RowNumber <= 100
     ORDER BY OrganisationName ASC
     
-Stringly generates SQL queries as Common Table Expressions in order to enable paging of results using the ROW_NUMBER() function.  This SQL should for SQL Server 2005 and above.
+Stringly generates SQL queries as Common Table Expressions in order to enable paging of results using the ROW_NUMBER() function.  This SQL should work or SQL Server 2005 and above.
 
 Previewing generated SQL
 ------------------------
