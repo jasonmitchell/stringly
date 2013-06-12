@@ -5,26 +5,18 @@ using Stringly.Queries;
 
 namespace Stringly
 {
-    public class FluentQueryBuilder
+    public abstract class AbstractFluentQueryBuilder : IFluentQueryBuilder
     {
         private readonly string connectionString;
         private readonly QueryMetadata metadata;
 
-        public static FluentQueryBuilder Query(string connectionString, string tableName)
-        {
-            QueryMetadata metadata = new QueryMetadata(tableName);
-            FluentQueryBuilder queryBuilder = new FluentQueryBuilder(connectionString, metadata);
-
-            return queryBuilder;
-        }
-
-        private FluentQueryBuilder(string connectionString, QueryMetadata metadata)
+        protected AbstractFluentQueryBuilder(string connectionString, string tableName)
         {
             this.connectionString = connectionString;
-            this.metadata = metadata;
+            metadata = new QueryMetadata(tableName);
         }
 
-        public FluentQueryBuilder Join(string tableName, string primaryKey, string foreignKey)
+        public IFluentQueryBuilder Join(string tableName, string primaryKey, string foreignKey)
         {
             JoinMetadata join = new JoinMetadata(tableName, primaryKey, foreignKey);
             metadata.AddJoin(join);
@@ -32,13 +24,13 @@ namespace Stringly
             return this;
         }
 
-        public FluentQueryBuilder Where(string fieldName, string comparisonOperation, string value)
+        public IFluentQueryBuilder Where(string fieldName, string comparisonOperation, string value)
         {
             ComparisonOperation strongComparisonOperation = (ComparisonOperation) Enum.Parse(typeof (ComparisonOperation), comparisonOperation);
             return Where(fieldName, strongComparisonOperation, value);
         }
 
-        public FluentQueryBuilder Where(string fieldName, ComparisonOperation comparisonOperation, string value)
+        public IFluentQueryBuilder Where(string fieldName, ComparisonOperation comparisonOperation, string value)
         {
             ConditionMetadata condition = new ConditionMetadata(fieldName, comparisonOperation, value);
             metadata.AddCondition(condition);
@@ -46,12 +38,12 @@ namespace Stringly
             return this;
         }
 
-        public FluentQueryBuilder Select(string fieldName)
+        public IFluentQueryBuilder Select(string fieldName)
         {
             return Select(fieldName, fieldName.Replace('.', '_'));
         }
 
-        public FluentQueryBuilder Select(string fieldName, string displayName)
+        public IFluentQueryBuilder Select(string fieldName, string displayName)
         {
             SelectMetadata select = new SelectMetadata(fieldName, displayName);
             metadata.AddSelect(select);
@@ -59,13 +51,13 @@ namespace Stringly
             return this;
         }
 
-        public FluentQueryBuilder OrderBy(string fieldName, string isAscending)
+        public IFluentQueryBuilder OrderBy(string fieldName, string isAscending)
         {
             bool strongIsAscending = bool.Parse(isAscending);
             return OrderBy(fieldName, strongIsAscending);
         }
 
-        public FluentQueryBuilder OrderBy(string fieldName, bool isAscending)
+        public IFluentQueryBuilder OrderBy(string fieldName, bool isAscending)
         {
             OrderingMetadata ordering = new OrderingMetadata(fieldName, isAscending);
             metadata.AddOrdering(ordering);
@@ -73,18 +65,28 @@ namespace Stringly
             return this;
         }
 
-        public FluentQueryBuilder Page(int currentPage, int recordsPerPage)
+        public IFluentQueryBuilder Page(int currentPage, int recordsPerPage)
         {
             metadata.Paging = new PagingMetadata(currentPage, recordsPerPage);
             return this;
         }
 
-        public IDynamicQuery Compile()
-        {
-            if(!metadata.Selects.Any())
-                throw new InvalidOperationException("No select fields have been specified.");
+        public abstract IDynamicQuery Compile();
 
-            return new SqlQuery(connectionString, metadata);
+        protected void AssertMetadataIsValid()
+        {
+            if (!metadata.Selects.Any())
+                throw new InvalidOperationException("No select fields have been specified.");
+        }
+
+        protected string ConnectionString
+        {
+            get { return connectionString; }
+        }
+
+        internal QueryMetadata Metadata
+        {
+            get { return metadata; }
         }
     }
 }
