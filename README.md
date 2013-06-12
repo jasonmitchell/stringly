@@ -14,7 +14,7 @@ Stringly uses a fluent API for building queries which allows developers to chain
 
     DataTable results = FluentQueryBuilder.Query(connectionString, "Users")
                                           .Join("Organisations", "Organisations.Id", "Users.OrganisationId")
-                                          .Where("Users.Name", ComparisonOperation.Equals, "Jason")
+                                          .Where("Users.FirstName", ComparisonOperation.Equals, "Jason")
                                           .Select("Users.FirstName")
                                           .Select("Users.LastName")
                                           .Select("Users.Username")
@@ -27,10 +27,12 @@ Stringly uses a fluent API for building queries which allows developers to chain
                                           
 This query will generate the following (semi-tidy) SQL:
 
-    WITH QueryPage AS (SELECT ROW_NUMBER() OVER (ORDER BY Organisations.Name ASC) AS RowNumber, Users.FirstName AS   [Users_FirstName], Users.LastName AS [Users_LastName], Users.Username AS [Users_Username], Organisations.Name AS [OrganisationName], Organisations.CreatedDate AS [Organisations_CreatedDate]
+    WITH QueryPage AS
+    (
+    SELECT ROW_NUMBER() OVER (ORDER BY Organisations.Name ASC) AS RowNumber, Users.FirstName AS [Users_FirstName], Users.LastName AS [Users_LastName], Users.Username AS [Users_Username], Organisations.Name AS [OrganisationName], Organisations.CreatedDate AS [Organisations_CreatedDate]
     FROM [Users]
     JOIN [Organisations] ON Organisations.Id = Users.OrganisationId
-    WHERE Users.Name = 'Jason'
+    WHERE Users.FirstName = 'Jason'
     )
     SELECT *
     FROM QueryPage
