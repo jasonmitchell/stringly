@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ComparisonOperation.cs" />
     <Compile Include="FluentQueryBuilder.cs" />
+    <Compile Include="Metadata\PagingMetadata.cs" />
     <Compile Include="Queries\IDynamicQuery.cs" />
     <Compile Include="Metadata\ConditionMetadata.cs" />
     <Compile Include="Metadata\JoinMetadata.cs" />
