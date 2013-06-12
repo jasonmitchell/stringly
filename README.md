@@ -34,7 +34,7 @@ This query will generate the following (semi-tidy) SQL:
     JOIN [Organisations] ON Organisations.Id = Users.OrganisationId
     WHERE Users.FirstName = 'Jason'
     )
-    SELECT *
+    SELECT [Users_FirstName], [Users_LastName], [Users_Username], [OrganisationName], [Organisations_CreatedDate]
     FROM QueryPage
     WHERE RowNumber > 0 AND RowNumber <= 100
     ORDER BY OrganisationName ASC
