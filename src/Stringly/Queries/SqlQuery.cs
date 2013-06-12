@@ -49,9 +49,12 @@ namespace Stringly.Queries
             sqlBuilder.AppendLine("SELECT *");
             sqlBuilder.AppendLine("FROM QueryPage");
 
-            int startRowNumber = (metadata.CurrentPage - 1) * metadata.RecordsPerPage;
-            int endRowNumber = startRowNumber + metadata.RecordsPerPage;
-            sqlBuilder.AppendLine(string.Format("WHERE RowNumber > {0} AND RowNumber <= {1}", startRowNumber, endRowNumber));
+            if (metadata.Paging != null)
+            {
+                int startRowNumber = (metadata.Paging.CurrentPage - 1) * metadata.Paging.RecordsPerPage;
+                int endRowNumber = startRowNumber + metadata.Paging.RecordsPerPage;
+                sqlBuilder.AppendLine(string.Format("WHERE RowNumber > {0} AND RowNumber <= {1}", startRowNumber, endRowNumber));
+            }
 
             GenerateOrderings(sqlBuilder, true);
 

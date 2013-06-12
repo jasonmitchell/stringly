@@ -75,9 +75,7 @@ namespace Stringly
 
         public FluentQueryBuilder Page(int currentPage, int recordsPerPage)
         {
-            metadata.CurrentPage = currentPage;
-            metadata.RecordsPerPage = recordsPerPage;
-
+            metadata.Paging = new PagingMetadata(currentPage, recordsPerPage);
             return this;
         }
 

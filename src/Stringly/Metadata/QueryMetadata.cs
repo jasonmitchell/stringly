@@ -12,9 +12,6 @@ namespace Stringly.Metadata
         private readonly List<ConditionMetadata> conditions = new List<ConditionMetadata>();
         private readonly List<OrderingMetadata> orderings = new List<OrderingMetadata>();
 
-        private int currentPage = 1;
-        private int recordsPerPage = 50;
-
         public QueryMetadata(string tableName)
         {
             this.tableName = tableName;
@@ -68,16 +65,6 @@ namespace Stringly.Metadata
             get { return orderings.AsReadOnly(); }
         }
 
-        public int CurrentPage
-        {
-            get { return currentPage; }
-            internal set { currentPage = value; }
-        }
-
-        public int RecordsPerPage
-        {
-            get { return recordsPerPage; }
-            internal set { recordsPerPage = value; }
-        }
+        public PagingMetadata Paging { get; internal set; }
     }
 }
