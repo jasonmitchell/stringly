@@ -43,6 +43,16 @@ namespace Stringly
             return Select(fieldName, fieldName.Replace('.', '_'));
         }
 
+        public IFluentQueryBuilder Select(string[] fieldNames)
+        {
+            foreach (string fieldName in fieldNames)
+            {
+                Select(fieldName);
+            }
+
+            return this;
+        }
+
         public IFluentQueryBuilder Select(string fieldName, string displayName)
         {
             SelectMetadata select = new SelectMetadata(fieldName, displayName);
