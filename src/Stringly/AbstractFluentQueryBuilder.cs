@@ -77,6 +77,9 @@ namespace Stringly
         {
             if (!metadata.Selects.Any())
                 throw new InvalidOperationException("No select fields have been specified.");
+
+            if(metadata.Paging != null && !metadata.Orderings.Any())
+                throw new InvalidOperationException("A default ordering must be provided if paging is required.");
         }
 
         protected string ConnectionString

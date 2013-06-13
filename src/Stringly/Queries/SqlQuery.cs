@@ -49,15 +49,20 @@ namespace Stringly.Queries
             string innerSql = GenerateInnerSql();
             StringBuilder sqlBuilder = new StringBuilder();
 
-            sqlBuilder.AppendLine("WITH QueryPage AS");
-            sqlBuilder.AppendLine("(");
+            if (metadata.Paging != null)
+            {
+                sqlBuilder.AppendLine("WITH QueryPage AS");
+                sqlBuilder.AppendLine("(");
+            }
+
             sqlBuilder.Append(innerSql);
-            sqlBuilder.AppendLine(")");
-            sqlBuilder.AppendLine(string.Format("SELECT [{0}]", string.Join("], [", metadata.Selects.Select(x => x.DisplayName).ToArray())));
-            sqlBuilder.AppendLine("FROM QueryPage");
 
             if (metadata.Paging != null)
             {
+                sqlBuilder.AppendLine(")");
+                sqlBuilder.AppendLine(string.Format("SELECT [{0}]", string.Join("], [", metadata.Selects.Select(x => x.DisplayName).ToArray())));
+                sqlBuilder.AppendLine("FROM QueryPage");
+
                 int startRowNumber = (metadata.Paging.CurrentPage - 1) * metadata.Paging.RecordsPerPage;
                 int endRowNumber = startRowNumber + metadata.Paging.RecordsPerPage;
                 sqlBuilder.AppendLine(string.Format("WHERE RowNumber > {0} AND RowNumber <= {1}", startRowNumber, endRowNumber));
@@ -84,14 +89,22 @@ namespace Stringly.Queries
         {
             sqlBuilder.Append("SELECT");
 
-            StringBuilder orderBuilder = new StringBuilder();
-            GenerateOrderings(orderBuilder, false);
+            bool hasPreviousSelect = false;
+            if (metadata.Paging != null)
+            {
+                StringBuilder orderBuilder = new StringBuilder();
+                GenerateOrderings(orderBuilder, false);
+                sqlBuilder.AppendFormat(" ROW_NUMBER() OVER ({0}) AS RowNumber", orderBuilder);
 
-            sqlBuilder.AppendFormat(" ROW_NUMBER() OVER ({0}) AS RowNumber", orderBuilder);
+                hasPreviousSelect = true;
+            }
 
             foreach (SelectMetadata select in metadata.Selects)
             {
-                sqlBuilder.AppendFormat(", {0} AS [{1}]", select.DataFieldName, select.DisplayName);
+                string prefix = hasPreviousSelect ? "," : "";
+                sqlBuilder.AppendFormat("{0} {1} AS [{2}]", prefix, select.DataFieldName, select.DisplayName);
+                
+                hasPreviousSelect = true;
             }
         }
 
@@ -135,6 +148,7 @@ namespace Stringly.Queries
         private void GenerateOrderings(StringBuilder sqlBuilder, bool useFieldDisplayNames)
         {
             bool hasPreviousOrdering = false;
+
             foreach (OrderingMetadata ordering in metadata.Orderings)
             {
                 string prefix = !hasPreviousOrdering ? "ORDER BY" : ",";
