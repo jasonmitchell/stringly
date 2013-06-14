@@ -1,7 +1,7 @@
 Stringly
 ========
 
-Stringly is a library for dynamically building queries from metadata supplied by an external source at runtime.  This is useful for scenarios where you don't know the structure of queries at compile-time but you need to provide a method of dynamically creating queries at run-time based on some external input; e.g. an application that allows users to create custom reports for a database through a UI such as a web page.  Stringly works by building a collection of metadata relating to a query which it uses to generate the query itself which can then be executed to return a DataTable.  **Strong typing of results hopefully coming in the future.**
+Stringly is a library for dynamically building queries from metadata supplied by an external source at runtime.  This is useful for scenarios where you don't know the structure of queries at compile-time but you need to provide a method of dynamically creating queries at run-time based on some external input; e.g. an application that allows users to create custom reports for a database through a UI such as a web page.  Stringly works by building a collection of metadata relating to a query which it uses to generate the query itself which can then be executed.  **Strong typing of results hopefully coming in the future.**
 
 Supported Query Methods
 -----------------------
@@ -12,18 +12,20 @@ Example
 
 Stringly uses a fluent API for building queries which allows developers to chain method calls together when constructing queries:
 
-    DataTable results = FluentSqlQueryBuilder.Query(connectionString, "Users")
-                                             .Join("Organisations", "Organisations.Id", "Users.OrganisationId")
-                                             .Where("Users.FirstName", ComparisonOperation.Equals, "Jason")
-                                             .Select("Users.FirstName")
-                                             .Select("Users.LastName")
-                                             .Select("Users.Username")
-                                             .Select("Organisations.Name", "OrganisationName")
-                                             .Select("Organisations.CreatedDate")
-                                             .OrderBy("Organisations.Name", true)
-                                             .Page(1, 100)
-                                             .Compile()
-                                             .Execute();
+    QueryResult results = FluentSqlQueryBuilder.Query(connectionString, "Users")
+                                               .Join("Organisations", "Organisations.Id", "Users.OrganisationId")
+                                               .Where("Users.FirstName", ComparisonOperation.Equals, "Jason")
+                                               .Select("Users.FirstName")
+                                               .Select("Users.LastName")
+                                               .Select("Users.Username")
+                                               .Select("Organisations.Name", "OrganisationName")
+                                               .Select("Organisations.CreatedDate")
+                                               .OrderBy("Organisations.Name", true)
+                                               .Page(1, 100)
+                                               .Compile()
+                                               .Execute();
+                                               
+*Note the use of the ComparisonOperation enum.  An overload of the Where() method is provided to accept a string instead of an enum*
                                           
 This query will generate the following (semi-tidy) SQL:
 
