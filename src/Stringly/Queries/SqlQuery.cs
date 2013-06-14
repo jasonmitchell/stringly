@@ -127,6 +127,7 @@ namespace Stringly.Queries
             Dictionary<ComparisonOperation, string> operatorMappings = new Dictionary<ComparisonOperation, string>
             {
                 { ComparisonOperation.Equals, "=" },
+                { ComparisonOperation.NotEquals, "!=" },
                 { ComparisonOperation.LessThan, "<" },
                 { ComparisonOperation.LessThanOrEqualTo, "<=" },
                 { ComparisonOperation.GreaterThan, ">" },

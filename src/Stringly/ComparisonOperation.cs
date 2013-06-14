@@ -4,6 +4,7 @@
     {
         Undefined,
         Equals,
+        NotEquals,
         LessThan,
         LessThanOrEqualTo,
         GreaterThan,
