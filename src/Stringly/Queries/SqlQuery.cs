@@ -154,8 +154,9 @@ namespace Stringly.Queries
                 string prefix = !hasPreviousOrdering ? "ORDER BY" : ",";
                 string fieldName = !useFieldDisplayNames ? ordering.Field : metadata.Selects.Single(x => x.DataFieldName == ordering.Field).DisplayName;
                 string direction = ordering.IsAscending ? "ASC" : "DESC";
+                string format = useFieldDisplayNames ? "{0} [{1}] {2}" : "{0} {1} {2}";
 
-                sqlBuilder.AppendFormat("{0} {1} {2}", prefix, fieldName, direction);
+                sqlBuilder.AppendFormat(format, prefix, fieldName, direction);
 
                 hasPreviousOrdering = true;
             }
