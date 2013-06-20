@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace Stringly.Queries
 
                     while (reader.Read())
                     {
-                        List<object> rowData = result.Columns.Select(x => reader[x]).ToList();
+                        List<object> rowData = result.Columns.Select(x => reader[x]).Select(x => x != DBNull.Value ? x : null).ToList();
                         result.Rows.Add(new QueryResultRow(rowData));
                     }
 
